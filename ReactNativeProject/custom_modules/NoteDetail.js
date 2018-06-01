@@ -8,6 +8,7 @@ import {
     Text,
 } from 'react-native';
 import NoteItem from './NoteItem'
+import ZKButton from "./ZKButton";
 
 
 export default class NoteDetail extends Component {
@@ -15,16 +16,17 @@ export default class NoteDetail extends Component {
     static navigationOptions = {
         title: 'NoteDetail',
     };
-    constructor(props) {
+    constructor(props) {NoteDetail
         super(props)
     }
-
+    
     render() {
         return (
             <ScrollView style={{flex: 1}}>
                 <NoteItem
                     note={this.props.navigation.state.params.note}
                 />
+                <ZKButton onPress={() => this.props.navigation.push('NoteDetail', {note:this.props.navigation.state.params.note})} />
             </ScrollView>
 
         );

@@ -9,11 +9,11 @@ import {
      state = {  }
      constructor(props) {
          super(props)
-         this.props.title=Button
-         this.props.color="blue"
-         this.props.onPress=()=>{ }
-         this.props.style={}
+
      }
+
+
+
      render() {
          return (
             <View style={this.props.style}>
@@ -24,4 +24,11 @@ import {
             </View>
          );
      }
+ }
+
+ ZKButton.defaultProps = {
+    title:'Button',
+    color:'blue',
+    onPress:()=>{ },
+    style:{backgroundColor:'red'}
  }
