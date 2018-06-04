@@ -42,7 +42,7 @@ export default class Home extends React.PureComponent {
     }
 
     itemClick(item, index) {
-        alert('点击了第' + index + '项，电影名称为：' + item.name);
+        // alert('点击了第' + index + '项，电影名称为：' + item.name);
         var title = '第' + (index + 1) + '个' + ' title=' + item.title;
         this.props.navigation.navigate('NoteDetail', {note:{bgColor: 'white', username: title, content:item.content}})
     }

@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { Component } from 'react'
 import {
     Image,
+    StatusBar
 } from 'react-native'
 import {
     createBottomTabNavigator,
-    StackNavigator,
     createStackNavigator
 } from 'react-navigation';
 
@@ -13,6 +13,16 @@ import Chat from './Chat'
 import Me from './Me'
 import NoteDetail from './NoteDetail'
 
+export default class RootScene extends Component {
+    constructor() {
+        super()
+        StatusBar.setBarStyle('light-content')
+    }
+
+    render() {
+        return <Navigator/>
+    }
+}
 
 const Tab = createBottomTabNavigator(
     {
@@ -36,7 +46,7 @@ const Tab = createBottomTabNavigator(
                     source={require('../img/favicon.png')}
                 />,
             }
-        }
+        },
     },
     {
         animationEnabled: true,
@@ -48,7 +58,7 @@ const Tab = createBottomTabNavigator(
             inactiveTintColor: 'gray',
             showIcon: true,
             indicatorStyle: {
-                height: 0,
+                height: 10,
             },
             style: {backgroundColor: 'white'},
             tabStyle: {height: 49},
@@ -57,34 +67,29 @@ const Tab = createBottomTabNavigator(
             pressOpacity: '0.1',
             upperCaseLabel: false,
         },
-
+        initialRouteName: 'Home',
     }
 )
 
 
-
-export default createStackNavigator(
+const Navigator =  createStackNavigator(
     {
-        Main: {
-            screen: Tab,
-        },
-        Chat: {
-            screen: Chat
-        },
-        NoteDetail: {
-            screen: NoteDetail
-        }
+        Tab: Tab,
+        Home: Home,
+        Chat: Chat,
+        NoteDetail: NoteDetail,
+        Me: Me,
+
     },
     {
-        initialRouteName: 'Main',
-        navigationOptions:{
-            headerBackTitle:null,
-            headerTintColor:'#333333',
-            showIcon:true,
-            swipeEnabled:true,
-            animationEnabled:false,
+        initialRouteName: 'Tab',
+        navigationOptions: {
+            headerStyle: {backgroundColor: '#235'},
+            headerTintColor: '#ffffff',
+            headerTruncatedBackTitle: 'fuck',
         },
+        mode: 'card',
 
-        mode:'card',
     }
+
 )

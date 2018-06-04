@@ -6,6 +6,7 @@ import {
     Image,
     ScrollView,
     Text,
+    Button
 } from 'react-native';
 import NoteItem from './NoteItem'
 import ZKButton from "./ZKButton";
@@ -15,6 +16,14 @@ export default class NoteDetail extends Component {
     state = {  }
     static navigationOptions = {
         title: 'NoteDetail',
+        headerTitle: 'NoteDetail-Header',
+        headerRight: (
+            <Button
+                onPress={() => alert('This is a button!')}
+                title="Info"
+                color="#235"
+            />
+        ),
     };
     constructor(props) {NoteDetail
         super(props)
@@ -27,6 +36,9 @@ export default class NoteDetail extends Component {
                     note={this.props.navigation.state.params.note}
                 />
                 <ZKButton onPress={() => this.props.navigation.push('NoteDetail', {note:this.props.navigation.state.params.note})} />
+                <ZKButton title='back' style={{backgroundColor:'white'}} onPress={() => this.props.navigation.goBack()} />
+                <ZKButton title='chat' style={{backgroundColor:'white'}} onPress={() => this.props.navigation.navigate('Chat')} />
+
             </ScrollView>
 
         );
