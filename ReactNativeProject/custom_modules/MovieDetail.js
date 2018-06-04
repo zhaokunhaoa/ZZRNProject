@@ -9,20 +9,19 @@ import {
     Alert,
     ActivityIndicator,
     Button,
-    TouchableOpacity
+    ScrollView,
 } from 'react-native'
 import ZKButton from './ZKButton';
 import MovieItem from './MovieItem'
-import Chat from './Chat'
 
 import {StackActions, NavigationActions} from 'react-navigation';
 
 const api = 'https://api.douban.com/v2/movie/in_theaters?city=%E4%B8%8A%E6%B5%B7&start=1&count=20'
 
-export default class Movies extends React.Component {
+export default class MovieDetai extends React.Component {
     static navigationOptions = ({navigation}) => ({
-        title: '电影',
-        headerTitle: '我是电影',
+        title: '电影信息',
+        headerTitle: '电影信息',
         headerRight: (
             <Button
                 onPress={() => navigation.navigate('Login')}
@@ -93,22 +92,6 @@ export default class Movies extends React.Component {
             });
     }
 
-    itemClick(item, index) {
-        this.props.navigation.navigate('MovieDetail', {movie: item})
-    }
-
-    _renderItem = (data) => {
-        return <TouchableOpacity
-                    activeOpacity={0.8}
-                    onPress={this.itemClick.bind(this, data.item, data.index)}>
-                    <MovieItem movie={data.item}/>
-               </TouchableOpacity>
-    }
-
-    _separator = () => {
-        return <View style={{height: 0.5, backgroundColor: '#999999'}}/>;
-    }
-
     render() {
 
         if (this.state.isLoading) {
@@ -120,14 +103,13 @@ export default class Movies extends React.Component {
         }
 
         return (
-            <View style={{flex: 1, paddingTop: 20}}>
-                <FlatList
-                    data={this.state.dataSource}
-                    renderItem={this._renderItem}
-                    keyExtractor={(item, index) => index.toString()}
-                    ItemSeparatorComponent={this._separator}
-                />
-            </View>
+            <ScrollView style={{flex: 1}}>
+                <MovieItem movie={this.props.navigation.state.params.movie} type='Detail' />
+                <View style={{flexDirection:'row', marginTop:10}}>
+                    <ZKButton title='想看' color='#666' style={{flex:1, backgroundColor:'white', margin:10, borderRadius:4}} />
+                    <ZKButton title='看过' color='#666' style={{flex:1, backgroundColor:'white', margin:10, borderRadius:4}} />
+                </View>
+            </ScrollView>
         );
     }
 

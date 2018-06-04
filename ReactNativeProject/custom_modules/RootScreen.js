@@ -14,6 +14,7 @@ import Me from './Me'
 import NoteDetail from './NoteDetail'
 import Movies from './Movies'
 import Login from './Login'
+import MovieDetail from './MovieDetail'
 
 export default class RootScene extends Component {
     constructor() {
@@ -94,6 +95,7 @@ const Navigator =  createStackNavigator(
         Me: Me,
         Movies: Movies,
         Login: Login,
+        MovieDetail: MovieDetail,
     },
     {
         initialRouteName: 'Tab',

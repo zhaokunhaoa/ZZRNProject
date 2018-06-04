@@ -15,7 +15,12 @@ export default class MovieItem extends PureComponent {
     render() {
         return(
             <View style={styles.container}>
-                <Image source={{uri:this.props.movie.images.medium}} style={{width:100, height:180, marginRight:15}} />
+                {
+                    this.props.type != 'Detail' ?
+                        (<Image source={{uri:this.props.movie.images.medium}} style={{width:100, height:180, marginRight:15}} />)
+                        :
+                        (<Image source={{uri:this.props.movie.images.medium}} style={{width:150, height:250, marginRight:15}} />)
+                }
                 <View style={{flex:1}}>
                     <Text style={{marginTop:10}}>
                         {this.props.movie.title}
@@ -53,10 +58,12 @@ export default class MovieItem extends PureComponent {
 
 }
 
+MovieItem.defaultProps = {
+    type:''
+}
 const styles = StyleSheet.create({
     container: {
         flexDirection:'row',
-        height:200,
         backgroundColor:'white',
         padding: 10
     },
