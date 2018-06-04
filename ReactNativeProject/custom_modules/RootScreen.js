@@ -12,6 +12,7 @@ import Home from './Home'
 import Chat from './Chat'
 import Me from './Me'
 import NoteDetail from './NoteDetail'
+import Movies from './Movies'
 
 export default class RootScene extends Component {
     constructor() {
@@ -47,6 +48,17 @@ const Tab = createBottomTabNavigator(
                 />,
             }
         },
+        Movies: {
+            screen: Movies,
+            navigationOptions: {
+                tabBarLabel: '电影',
+                headerTitle: '电影',
+                tabBarIcon: ({tintColor}) => <Image
+                    style={{tintColor: tintColor, width: 20, height: 20,}}
+                    source={require('../img/favicon.png')}
+                />,
+            }
+        }
     },
     {
         animationEnabled: true,
@@ -79,14 +91,14 @@ const Navigator =  createStackNavigator(
         Chat: Chat,
         NoteDetail: NoteDetail,
         Me: Me,
-
+        Movies: Movies
     },
     {
         initialRouteName: 'Tab',
         navigationOptions: {
             headerStyle: {backgroundColor: '#235'},
             headerTintColor: '#ffffff',
-            headerTruncatedBackTitle: 'fuck',
+            headerTruncatedBackTitle: '返回',
         },
         mode: 'card',
 

@@ -6,6 +6,7 @@ import Me from './Me'
 import Root from './RootScreen'
 import Chat from './Chat'
 import NoteDetail from './NoteDetail'
+import Movies from './Movies'
 
 export {
     NoteItem,
@@ -15,4 +16,5 @@ export {
     Root,
     Chat,
     NoteDetail,
+    Movies
 }

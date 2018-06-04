@@ -27,13 +27,13 @@ export default class Chat extends React.Component {
     }
 
     componentDidMount(){
-        return fetch('https://facebook.github.io/react-native/movies.json')
+        return fetch('https://api.douban.com/v2/movie/in_theaters?city=%E4%B8%8A%E6%B5%B7&start=1&count=20')
             .then((response) => response.json())
             .then((responseJson) => {
 
                 this.setState({
                     isLoading: false,
-                    dataSource: responseJson.movies,
+                    dataSource: responseJson.subjects,
                 }, function(){
 
                 });
