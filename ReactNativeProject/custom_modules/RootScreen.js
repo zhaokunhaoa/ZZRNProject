@@ -13,11 +13,12 @@ import Chat from './Chat'
 import Me from './Me'
 import NoteDetail from './NoteDetail'
 import Movies from './Movies'
+import Login from './Login'
 
 export default class RootScene extends Component {
     constructor() {
         super()
-        StatusBar.setBarStyle('light-content')
+        StatusBar.setBarStyle('dark-content')
     }
 
     render() {
@@ -91,13 +92,14 @@ const Navigator =  createStackNavigator(
         Chat: Chat,
         NoteDetail: NoteDetail,
         Me: Me,
-        Movies: Movies
+        Movies: Movies,
+        Login: Login,
     },
     {
         initialRouteName: 'Tab',
         navigationOptions: {
-            headerStyle: {backgroundColor: '#235'},
-            headerTintColor: '#ffffff',
+            headerStyle: {backgroundColor: '#fff'},
+            headerTintColor: '#235',
             headerTruncatedBackTitle: '返回',
         },
         mode: 'card',

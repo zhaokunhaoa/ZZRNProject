@@ -7,6 +7,7 @@ import Root from './RootScreen'
 import Chat from './Chat'
 import NoteDetail from './NoteDetail'
 import Movies from './Movies'
+import Login from './Login'
 
 export {
     NoteItem,
@@ -16,5 +17,6 @@ export {
     Root,
     Chat,
     NoteDetail,
-    Movies
+    Movies,
+    Login
 }

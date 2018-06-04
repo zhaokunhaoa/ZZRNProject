@@ -10,22 +10,25 @@ import {
 } from 'react-native';
 import NoteItem from './NoteItem'
 import ZKButton from "./ZKButton";
+import Movies from "./Movies";
 
 
 export default class NoteDetail extends Component {
     state = {  }
-    static navigationOptions = {
+
+    _clickChat() {
+        this.props.navigation.navigate('Login')
+    }
+
+    static navigationOptions = ({navigation}) => ({
         title: 'NoteDetail',
         headerTitle: 'NoteDetail-Header',
-        headerRight: (
-            <Button
-                onPress={() => alert('This is a button!')}
-                title="Info"
-                color="#235"
-            />
-        ),
-    };
-    constructor(props) {NoteDetail
+        headerRight:
+            <Button title='About'
+                    onPress={() => navigation.push('Movies')}
+            />,
+    });
+    constructor(props) {
         super(props)
     }
     

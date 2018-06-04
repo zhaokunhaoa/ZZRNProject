@@ -6,16 +6,28 @@ import {
     View,
     StyleSheet,
     ScrollView,
-    Alert
+    Alert,
+    Button
 } from 'react-native';
 
 import ZKButton from './ZKButton'
 
 export default class App extends Component {
-    state = {
-        name: '',
-        email: '',
-    };
+
+    static navigationOptions = ({navigation}) => ({
+        title: 'Login',
+        headerTitle: '我是Login',
+        headerRight: (
+            <Button
+                onPress={() => navigation.navigate('Chat')}
+                title="Info"
+            />
+        ),
+    });
+    constructor(props) {
+        super(props)
+        this.state={name:'', email:''}
+    }
 
     render() {
         return (

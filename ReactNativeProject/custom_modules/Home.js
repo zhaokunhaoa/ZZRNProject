@@ -85,7 +85,7 @@ export default class Home extends React.PureComponent {
         return (
             <View style={{flex:1}}>
                 <Button title='滚动到指定位置' onPress={()=>{
-                    this.props.navigation.push('Movies')
+                    this.props.navigation.navigate('Movies')
                 }}/>
                 <View style={{flex:1}}>
                     <FlatList

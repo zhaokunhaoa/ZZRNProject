@@ -7,19 +7,28 @@ import {
     StyleSheet,
     SectionList,
     Alert,
-    ActivityIndicator
+    ActivityIndicator,
+    Button
 } from 'react-native'
 import ZKButton from './ZKButton';
 import MovieItem from './MovieItem'
+import Chat from './Chat'
 
 import {StackActions, NavigationActions} from 'react-navigation';
 
 const api = 'https://api.douban.com/v2/movie/in_theaters?city=%E4%B8%8A%E6%B5%B7&start=1&count=20'
 
 export default class Movies extends React.Component {
-    static navigationOptions = {
+    static navigationOptions = ({navigation}) => ({
         title: '电影',
-    };
+        headerTitle: '我是电影',
+        headerRight: (
+            <Button
+                onPress={() => navigation.navigate('Login')}
+                title="Info"
+            />
+        ),
+    });
 
 
     constructor(props) {
