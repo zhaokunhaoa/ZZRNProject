@@ -13,12 +13,14 @@ import {
 export default class MovieItem extends React.PureComponent {
 
     _onPress = () => {
-        this.props.onPressItem(this.props.movie.id);
+        if (this.props.onPressItem != null) {
+            this.props.onPressItem(this.props.movie.id);
+        }
     };
 
     render() {
         return(
-            <TouchableOpacity onPress={this._onPress}>
+            <TouchableOpacity onPress={this._onPress} activeOpacity={(this.props.onPressItem != null)?0.5:1}>
                 <View style={styles.container}>
                     {
                         this.props.type != 'Detail' ?

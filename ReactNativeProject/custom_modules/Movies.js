@@ -9,15 +9,18 @@ import {
     Alert,
     ActivityIndicator,
     Button,
-    TouchableOpacity
+    TouchableOpacity,
+    RefreshControl
 } from 'react-native'
 import ZKButton from './ZKButton';
 import MovieItem from './MovieItem'
 import Chat from './Chat'
 import './Service'
+import './FlatListState'
 
 import {StackActions, NavigationActions} from 'react-navigation';
 import {queryMovies} from "./Service";
+import FlatListState from "./FlatListState";
 
 const api = 'https://api.douban.com/v2/movie/in_theaters?city=%E4%B8%8A%E6%B5%B7&start=1&count=20'
 
@@ -37,9 +40,10 @@ export default class Movies extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isLoading: false,
+            isLoading: true,
             pageIndex: 0,
             isHeaderRefreshing: false,
+            footerRefreshState: FlatListState.Idle,
             dataSource: [],
         }
     }
@@ -51,9 +55,21 @@ export default class Movies extends React.Component {
     loadMovieData() {
         let pageIndex = this.state.pageIndex
         // alert(pageIndex)
-        fetch(queryMovies('上海', 0, 20))
+        fetch(queryMovies('上海', pageIndex, 10))
             .then((response) => response.json())
             .then((json) => {
+                console.log('start')
+
+                console.log('end')
+                if (json == null) {
+                    this.setState({
+                        isLoading: false,
+                        isHeaderRefreshing: false,
+                        footerRefreshState: FlatListState.Failure
+                    })
+                    return
+                }
+
                 var movies = []
                 for (var idx in json.subjects) {
                     var movieItem = json.subjects[idx]
@@ -81,12 +97,15 @@ export default class Movies extends React.Component {
                     movies.push(movieItem)
                 }
                 let start = pageIndex + json.subjects.length
-
+                let refreshState = (movies.length == 0) ? FlatListState.NoMoreData : FlatListState.Idle
+                let movieList = this.state.dataSource.concat(movies)
+                // alert('load success')
                 this.setState({
                     isLoading: false,
-                    dataSource: movies,
+                    dataSource: movieList,
                     pageIndex: start,
                     isHeaderRefreshing: false,
+                    footerRefreshState: refreshState
                 }, function () {
 
                 });
@@ -97,6 +116,7 @@ export default class Movies extends React.Component {
                 this.setState({
                     isLoading: false,
                     isHeaderRefreshing: false,
+                    footerRefreshState: FlatListState.Failure
                 })
             })
     }
@@ -125,10 +145,53 @@ export default class Movies extends React.Component {
         return <View style={{height: 0.5, backgroundColor: '#999999'}}/>;
     }
 
-    _onRefresh = () => {
+    renderFooter() {
+        let footer = null
+
+        switch (this.state.footerRefreshState) {
+            case FlatListState.Idle:
+                break;
+            case FlatListState.Refreshing:
+                footer =
+                    <View style={styles.footer}>
+                        <ActivityIndicator size="small"/>
+                        <Text style={styles.footerText}>努力加载中</Text>
+                    </View>
+                break;
+            case FlatListState.NoMoreData:
+                footer =
+                    <View style={styles.footer}>
+                        <Text style={styles.footerText}>没有更多数据了</Text>
+                    </View>
+                break;
+            case FlatListState.Failure:
+                footer =
+                    <View style={styles.footer}>
+                        <Text style={styles.footerText}>加载失败，请稍后重试</Text>
+                    </View>
+                break;
+        }
+        return footer;
+    }
+
+    _headerRefresh = () => {
         this.setState({
-            isHeaderRefreshing: true
+            isHeaderRefreshing: true,
         })
+        this.loadMovieData()
+    }
+
+    _footerRefresh = () => {
+        // 如果正在刷新或者没有更多数据，就不再拉取数据
+        if (this.state.footerRefreshState == FlatListState.refreshing ||
+            this.state.footerRefreshState == FlatListState.NoMoreData ||
+            this.state.isHeaderRefreshing) {
+            return
+        }
+        this.setState({
+            footerRefreshState: FlatListState.Refreshing
+        })
+        // alert('end footer')
         this.loadMovieData()
     }
 
@@ -152,7 +215,16 @@ export default class Movies extends React.Component {
                     ItemSeparatorComponent={this._separator}
                     initialNumToRender={4}
                     refreshing={this.state.isHeaderRefreshing}
-                    onRefresh={this._onRefresh}
+                    onRefresh={this._headerRefresh}
+                    // refreshControl={
+                    //     <RefreshControl
+                    //         refreshing={this.state.isHeaderRefreshing}
+                    //         onRefresh={this._headerRefresh}
+                    //         title="Loading..."/>
+                    // }
+                    onEndReached={this._footerRefresh}
+                    onEndReachedThreshold={0.1}
+                    ListFooterComponent={this.renderFooter()}
                 />
             </View>
         );
@@ -185,5 +257,15 @@ const styles = StyleSheet.create({
         height: 44,
         backgroundColor: 'white'
 
+    },
+    footer: {
+        alignItems:'center',
+        marginTop: 10,
+    },
+    footerText: {
+        flex:1,
+        marginTop: 10,
+        marginBottom:20,
+        color:'#666666'
     },
 })

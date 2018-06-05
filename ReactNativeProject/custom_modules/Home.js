@@ -91,7 +91,7 @@ export default class Home extends React.PureComponent {
                     <FlatList
                         // ref={(flatList)=>this._flatList = flatList}
                         // ListHeaderComponent={this._header}
-                        // ListFooterComponent={this._footer}
+                        ListFooterComponent={this._footer}
                         ItemSeparatorComponent={this._separator}
                         renderItem={this._renderItem}
                         keyExtractor={this._keyExtractor}
