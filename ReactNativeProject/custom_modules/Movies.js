@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {PureComponent} from 'react'
 
 import {
     Text,
@@ -14,8 +14,10 @@ import {
 import ZKButton from './ZKButton';
 import MovieItem from './MovieItem'
 import Chat from './Chat'
+import './Service'
 
 import {StackActions, NavigationActions} from 'react-navigation';
+import {queryMovies} from "./Service";
 
 const api = 'https://api.douban.com/v2/movie/in_theaters?city=%E4%B8%8A%E6%B5%B7&start=1&count=20'
 
@@ -34,15 +36,24 @@ export default class Movies extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {isLoading: true}
+        this.state = {
+            isLoading: false,
+            pageIndex: 0,
+            isHeaderRefreshing: false,
+            dataSource: [],
+        }
     }
 
     componentDidMount() {
-        return fetch(api)
+        this.loadMovieData()
+    }
+
+    loadMovieData() {
+        let pageIndex = this.state.pageIndex
+        // alert(pageIndex)
+        fetch(queryMovies('上海', 0, 20))
             .then((response) => response.json())
             .then((json) => {
-
-
                 var movies = []
                 for (var idx in json.subjects) {
                     var movieItem = json.subjects[idx]
@@ -69,10 +80,13 @@ export default class Movies extends React.Component {
                     movieItem["actorNames"] = actors
                     movies.push(movieItem)
                 }
+                let start = pageIndex + json.subjects.length
 
                 this.setState({
                     isLoading: false,
                     dataSource: movies,
+                    pageIndex: start,
+                    isHeaderRefreshing: false,
                 }, function () {
 
                 });
@@ -80,23 +94,42 @@ export default class Movies extends React.Component {
             })
             .catch((error) => {
                 console.error(error);
-            });
+                this.setState({
+                    isLoading: false,
+                    isHeaderRefreshing: false,
+                })
+            })
     }
 
-    itemClick(item, index) {
-        this.props.navigation.navigate('MovieDetail', {movieID: item.id})
-    }
+    _onPressItem = (id: string) => {
+        // updater functions are preferred for transactional updates
+        this.setState((state) => {
+            // copy the map rather than modifying state.
+            const selected = new Map(state.selected);
+            selected.set(id, !selected.get(id)); // toggle
+            return {selected};
+        });
+        this.props.navigation.navigate('MovieDetail', {movieID: id})
+
+    };
 
     _renderItem = (data) => {
-        return <TouchableOpacity
-                    activeOpacity={0.8}
-                    onPress={this.itemClick.bind(this, data.item, data.index)}>
-                    <MovieItem movie={data.item}/>
-               </TouchableOpacity>
+        return <MovieItem
+                movie={data.item}
+                onPressItem={this._onPressItem}
+                hi
+                />
     }
 
     _separator = () => {
         return <View style={{height: 0.5, backgroundColor: '#999999'}}/>;
+    }
+
+    _onRefresh = () => {
+        this.setState({
+            isHeaderRefreshing: true
+        })
+        this.loadMovieData()
     }
 
     render() {
@@ -110,12 +143,16 @@ export default class Movies extends React.Component {
         }
 
         return (
-            <View style={{flex: 1, paddingTop: 20}}>
+            <View style={{flex: 1}}>
                 <FlatList
+                    style={{flex: 1}}
                     data={this.state.dataSource}
                     renderItem={this._renderItem}
                     keyExtractor={(item, index) => index.toString()}
                     ItemSeparatorComponent={this._separator}
+                    initialNumToRender={4}
+                    refreshing={this.state.isHeaderRefreshing}
+                    onRefresh={this._onRefresh}
                 />
             </View>
         );

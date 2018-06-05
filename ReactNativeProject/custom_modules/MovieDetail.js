@@ -13,8 +13,10 @@ import {
 } from 'react-native'
 import ZKButton from './ZKButton';
 import MovieItem from './MovieItem'
+import './Service'
 
 import {StackActions, NavigationActions} from 'react-navigation';
+import {movieDetail} from "./Service";
 
 const api = 'https://api.douban.com/v2/movie/subject/'
 
@@ -37,7 +39,7 @@ export default class MovieDetai extends React.Component {
     }
 
     componentDidMount() {
-        return fetch(api+this.props.navigation.state.params.movieID)
+        return fetch(movieDetail(this.props.navigation.state.params.movieID))
             .then((response) => response.json())
             .then((json) => {
 
