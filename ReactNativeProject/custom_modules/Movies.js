@@ -55,16 +55,6 @@ export default class Movies extends React.Component {
                             directors = directors + " " + director.name
                         }
                     }
-                    var movieItem = json.subjects[idx]
-                    var directors = ""
-                    for (var index in movieItem.directors) {
-                        var director = movieItem.directors[index]
-                        if (directors == "") {
-                            directors = directors + director.name
-                        } else {
-                            directors = directors + " " + director.name
-                        }
-                    }
                     movieItem["directorNames"] = directors
 
                     var actors = ""
@@ -94,7 +84,7 @@ export default class Movies extends React.Component {
     }
 
     itemClick(item, index) {
-        this.props.navigation.navigate('MovieDetail', {movie: item})
+        this.props.navigation.navigate('MovieDetail', {movieID: item.id})
     }
 
     _renderItem = (data) => {

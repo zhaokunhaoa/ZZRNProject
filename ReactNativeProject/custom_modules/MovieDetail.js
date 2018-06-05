@@ -16,12 +16,12 @@ import MovieItem from './MovieItem'
 
 import {StackActions, NavigationActions} from 'react-navigation';
 
-const api = 'https://api.douban.com/v2/movie/in_theaters?city=%E4%B8%8A%E6%B5%B7&start=1&count=20'
+const api = 'https://api.douban.com/v2/movie/subject/'
 
 export default class MovieDetai extends React.Component {
     static navigationOptions = ({navigation}) => ({
         title: '电影信息',
-        headerTitle: '电影信息',
+        headerTitle: '电影',
         headerRight: (
             <Button
                 onPress={() => navigation.navigate('Login')}
@@ -37,51 +37,36 @@ export default class MovieDetai extends React.Component {
     }
 
     componentDidMount() {
-        return fetch(api)
+        return fetch(api+this.props.navigation.state.params.movieID)
             .then((response) => response.json())
             .then((json) => {
 
-
-                var movies = []
-                for (var idx in json.subjects) {
-                    var movieItem = json.subjects[idx]
-                    var directors = ""
-                    for (var index in movieItem.directors) {
-                        var director = movieItem.directors[index]
-                        if (directors == "") {
-                            directors = directors + director.name
-                        } else {
-                            directors = directors + " " + director.name
-                        }
+                var directors = ""
+                for (var index in json.directors) {
+                    var director = json.directors[index]
+                    if (directors == "") {
+                        directors = directors + director.name
+                    } else {
+                        directors = directors + " " + director.name
                     }
-                    var movieItem = json.subjects[idx]
-                    var directors = ""
-                    for (var index in movieItem.directors) {
-                        var director = movieItem.directors[index]
-                        if (directors == "") {
-                            directors = directors + director.name
-                        } else {
-                            directors = directors + " " + director.name
-                        }
-                    }
-                    movieItem["directorNames"] = directors
-
-                    var actors = ""
-                    for (var index in movieItem.casts) {
-                        var actor = movieItem.casts[index]
-                        if (actors == "") {
-                            actors = actors + actor.name
-                        } else {
-                            actors = actors + " " + actor.name
-                        }
-                    }
-                    movieItem["actorNames"] = actors
-                    movies.push(movieItem)
                 }
+                json["directorNames"] = directors
+
+                var actors = ""
+                for (var index in json.casts) {
+                    var actor = json.casts[index]
+                    if (actors == "") {
+                        actors = actors + actor.name
+                    } else {
+                        actors = actors + " " + actor.name
+                    }
+                }
+                json["actorNames"] = actors
+
 
                 this.setState({
                     isLoading: false,
-                    dataSource: movies,
+                    dataSource: json,
                 }, function () {
 
                 });
@@ -104,11 +89,14 @@ export default class MovieDetai extends React.Component {
 
         return (
             <ScrollView style={{flex: 1}}>
-                <MovieItem movie={this.props.navigation.state.params.movie} type='Detail' />
-                <View style={{flexDirection:'row', marginTop:10}}>
-                    <ZKButton title='想看' color='#666' style={{flex:1, backgroundColor:'white', margin:10, borderRadius:4}} />
-                    <ZKButton title='看过' color='#666' style={{flex:1, backgroundColor:'white', margin:10, borderRadius:4}} />
+                <MovieItem movie={this.state.dataSource} type='Detail' />
+                <View style={{flexDirection:'row'}}>
+                    <ZKButton title='想看' color='#666' style={{flex:1, backgroundColor:'white', padding:10, borderRadius:4}} />
+                    <ZKButton title='看过' color='#666' style={{flex:1, backgroundColor:'white', padding:10, borderRadius:4}} />
                 </View>
+                <Text style={styles.summary}>
+                    {this.state.dataSource.summary}
+                </Text>
             </ScrollView>
         );
     }
@@ -141,4 +129,9 @@ const styles = StyleSheet.create({
         backgroundColor: 'white'
 
     },
+    summary: {
+        backgroundColor:'white',
+        marginTop:10,
+        padding:10,
+    }
 })
