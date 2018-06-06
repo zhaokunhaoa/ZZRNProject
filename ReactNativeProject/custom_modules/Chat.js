@@ -12,6 +12,14 @@ import {
 import ZKButton from './ZKButton'
 
 export default class App extends Component {
+
+    static navigationOptions = ({navigation}) => ({
+        title: 'Chat',
+        headerTitle: 'Chat',
+        headerRight: (
+            <Text>Hello</Text>
+        ),
+    });
     state = {
         name: '',
         email: '',
@@ -29,37 +37,6 @@ export default class App extends Component {
                         next input to submitting the form.
                     </Text>
                 </View>
-                <TextInput
-                    style={styles.input}
-                    value={this.state.name}
-                    onChangeText={name => this.setState({name})}
-                    ref={ref => {
-                        this._nameInput = ref
-                    }}
-                    placeholder="Full Name"
-                    autoFocus={true}
-                    autoCapitalize="words"
-                    autoCorrect={true}
-                    keyboardType="default"
-                    returnKeyType="next"
-                    onSubmitEditing={this._next}
-                    blurOnSubmit={false}
-                />
-                <TextInput
-                    style={styles.input}
-                    value={this.state.email}
-                    onChangeText={email => this.setState({email})}
-                    ref={ref => {
-                        this._emailInput = ref
-                    }}
-                    placeholder="email@example.com"
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    keyboardType="email-address"
-                    returnKeyType="done"
-                    onSubmitEditing={this._submit}
-                    blurOnSubmit={true}
-                />
 
             </ScrollView>
         );

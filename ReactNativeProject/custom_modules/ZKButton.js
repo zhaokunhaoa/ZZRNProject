@@ -16,10 +16,11 @@ import {
 
      render() {
          return (
-            <View style={this.props.style}>
+            <View style={[this.props.style, {flex: 1,alignItems:'center', justifyContent:'center'}]}>
                 <Button title={this.props.title}
                         onPress={this.props.onPress}
                         color={this.props.color}
+                        fontSize={this.props.fontSize}
                 />
             </View>
          );
@@ -28,7 +29,8 @@ import {
 
  ZKButton.defaultProps = {
     title:'Button',
-    color:'blue',
+    color:'#333333',
+     fontSize:15,
     onPress:()=>{ },
-    style:{backgroundColor:'red'}
+    style:{backgroundColor:'white'}
  }
