@@ -74,7 +74,7 @@ export default class App extends Component {
                     keyboardType="default"
                     secureTextEntry={true}
                     returnKeyType="done"
-                    onSubmitEditing={this._submit}
+                    onSubmitEditing={this._done}
                     blurOnSubmit={true}
                 />
                 <View style = {[styles.container, {alignItems:'center'}]}>
@@ -98,7 +98,12 @@ export default class App extends Component {
         this._emailInput && this._emailInput.focus();
     };
 
+    _done = () => {
+        this._emailInput.blur();
+    };
+
     _submit = () => {
+
         alert(`Welcome, ${this.state.name}! Confirmation password has been sent to ${this.state.email}`);
     };
 }

@@ -134,6 +134,13 @@ const styles = StyleSheet.create({
     summary: {
         backgroundColor:'white',
         marginTop:10,
-        padding:10,
+        paddingLeft:10,
+        paddingRight:10,
+        paddingTop:5,
+        paddingBottom:5,
+        fontSize:15,
+        color:'#333333',
+        marginBottom:100,
+        lineHeight:25,
     }
 })
